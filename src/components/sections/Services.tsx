@@ -1,79 +1,109 @@
-import Card from "@/components/ui/Card";
+import {
+  Bot,
+  CloudCog,
+  Code2,
+  Gauge,
+  Network,
+  PanelsTopLeft,
+} from "lucide-react";
+
+import Badge from "@/components/ui/Badge";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
+import ServiceCard from "@/components/ui/ServiceCard";
 
 const services = [
   {
-    title: "Desarrollo Web",
+    title: "Desarrollo web",
     description:
-      "Creamos sitios y plataformas rápidas, modernas y adaptadas a cualquier dispositivo.",
-    number: "01",
+      "Creamos sitios corporativos, plataformas y aplicaciones modernas, rápidas y adaptadas a cualquier dispositivo.",
+    icon: PanelsTopLeft,
   },
   {
-    title: "Sistemas Empresariales",
+    title: "Sistemas empresariales",
     description:
-      "Desarrollamos soluciones a medida para optimizar operaciones, ventas y procesos internos.",
-    number: "02",
+      "Desarrollamos soluciones a medida para optimizar ventas, operaciones, clientes y procesos internos.",
+    icon: Code2,
   },
   {
-    title: "Inteligencia Artificial",
+    title: "Inteligencia artificial",
     description:
-      "Integramos asistentes, automatizaciones y herramientas inteligentes orientadas al negocio.",
-    number: "03",
+      "Integramos asistentes inteligentes, automatizaciones y herramientas de IA orientadas a resultados.",
+    icon: Bot,
   },
   {
     title: "Integraciones API",
     description:
-      "Conectamos CRM, pagos, mensajería, calendarios y plataformas de terceros.",
-    number: "04",
+      "Conectamos CRM, pagos, mensajería, calendarios, servicios cloud y plataformas de terceros.",
+    icon: Network,
   },
   {
-    title: "QA & Performance",
+    title: "QA y performance",
     description:
-      "Validamos funcionalidad, calidad y rendimiento para entregar productos confiables.",
-    number: "05",
+      "Validamos funcionalidad, experiencia, estabilidad y rendimiento para entregar productos confiables.",
+    icon: Gauge,
   },
   {
-    title: "Cloud & DevOps",
+    title: "Cloud y DevOps",
     description:
-      "Preparamos aplicaciones escalables con despliegues estables y procesos automatizados.",
-    number: "06",
+      "Preparamos aplicaciones escalables mediante despliegues estables, monitoreo y procesos automatizados.",
+    icon: CloudCog,
   },
 ];
 
 export default function Services() {
   return (
-    <section id="services" className="bg-slate-50 py-24">
+    <section id="services" className="relative overflow-hidden bg-slate-50 py-24">
+      <div className="absolute right-0 top-0 -z-10 h-96 w-96 rounded-full bg-blue-100/60 blur-3xl" />
+
       <Container>
-        <SectionTitle
-          eyebrow="Nuestros servicios"
-          title="Tecnología diseñada para hacer crecer tu empresa"
-          description="Combinamos desarrollo, automatización, calidad e integración para construir soluciones digitales completas."
-        />
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <SectionTitle
+            eyebrow="Nuestros servicios"
+            title="Soluciones digitales para impulsar tu crecimiento"
+            description="Combinamos desarrollo, automatización, calidad e integración para construir productos digitales completos y preparados para evolucionar."
+          />
 
-        <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <Badge variant="neutral">
+            Tecnología de principio a fin
+          </Badge>
+        </div>
+
+        <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service) => (
-            <Card key={service.title} className="group">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-sm font-extrabold text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white">
-                {service.number}
-              </div>
+            <ServiceCard
+              key={service.title}
+              title={service.title}
+              description={service.description}
+              icon={service.icon}
+            />
+          ))}
+        </div>
 
-              <h3 className="mt-7 text-2xl font-bold text-slate-950">
-                {service.title}
-              </h3>
-
-              <p className="mt-4 leading-7 text-slate-600">
-                {service.description}
+        <div className="mt-16 rounded-3xl bg-slate-950 p-8 text-white sm:p-12">
+          <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[0.22em] text-blue-400">
+                Soluciones personalizadas
               </p>
 
-              <a
-                href="#contact"
-                className="mt-7 inline-flex font-semibold text-blue-600 transition group-hover:translate-x-1"
-              >
-                Conocer más →
-              </a>
-            </Card>
-          ))}
+              <h3 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight sm:text-4xl">
+                ¿Necesitas una solución que no aparece en la lista?
+              </h3>
+
+              <p className="mt-5 max-w-2xl leading-7 text-slate-300">
+                Analizamos tu necesidad y diseñamos una propuesta tecnológica
+                adaptada a tus procesos, objetivos y presupuesto.
+              </p>
+            </div>
+
+            <a
+              href="#contact"
+              className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-7 py-4 font-bold text-white transition duration-300 hover:-translate-y-1 hover:bg-blue-700"
+            >
+              Conversemos sobre tu proyecto
+            </a>
+          </div>
         </div>
       </Container>
     </section>
