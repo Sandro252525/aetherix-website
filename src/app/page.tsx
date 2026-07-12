@@ -1,6 +1,7 @@
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import Contact from "@/components/sections/Contact";
+import Faq from "@/components/sections/Faq";
 import Hero from "@/components/sections/Hero";
 import Portfolio from "@/components/sections/Portfolio";
 import Services from "@/components/sections/Services";
@@ -20,6 +21,7 @@ export default function Home() {
         <Technologies />
         <Portfolio />
         <Testimonials />
+        <Faq />
         <Contact />
       </main>
 
