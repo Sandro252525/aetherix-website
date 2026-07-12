@@ -1,19 +1,27 @@
+import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
+import Contact from "@/components/sections/Contact";
 import Hero from "@/components/sections/Hero";
-import Services from "@/components/sections/Services";
-import WhyChooseUs from "@/components/sections/WhyChooseUs";
-import Technologies from "@/components/sections/Technologies";
 import Portfolio from "@/components/sections/Portfolio";
+import Services from "@/components/sections/Services";
+import Technologies from "@/components/sections/Technologies";
+import WhyChooseUs from "@/components/sections/WhyChooseUs";
 
 export default function Home() {
   return (
-    <main>
+    <>
       <Navbar />
-      <Hero />
-      <Services />
-      <WhyChooseUs />
-      <Technologies />
-      <Portfolio />
-    </main>
+
+      <main>
+        <Hero />
+        <Services />
+        <WhyChooseUs />
+        <Technologies />
+        <Portfolio />
+        <Contact />
+      </main>
+
+      <Footer />
+    </>
   );
 }
