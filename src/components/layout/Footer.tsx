@@ -1,6 +1,7 @@
+import Link from "next/link";
 import {
   Code2,
-  Link,
+  Globe,
   Mail,
   MessageCircle,
 } from "lucide-react";
@@ -8,6 +9,7 @@ import {
 import Container from "@/components/ui/Container";
 import Logo from "@/components/ui/Logo";
 import { navigation } from "@/data/navigation";
+import { siteConfig } from "@/config/site";
 
 const services = [
   "Desarrollo web",
@@ -20,12 +22,13 @@ const services = [
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const phoneNumber = siteConfig.phone.replace(/\D/g, "");
 
   return (
     <footer className="bg-slate-950 text-white">
       <Container className="py-16">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
-          <div className="lg:col-span-1">
+          <div>
             <Logo className="[&_p]:text-white [&_p:last-child]:text-slate-400" />
 
             <p className="mt-6 max-w-sm leading-7 text-slate-400">
@@ -35,7 +38,9 @@ export default function Footer() {
 
             <div className="mt-7 flex gap-3">
               <a
-                href="#"
+                href="https://github.com/Sandro252525"
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label="Portafolio de código"
                 className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 text-slate-300 transition hover:border-blue-500 hover:bg-blue-600 hover:text-white"
               >
@@ -43,15 +48,17 @@ export default function Footer() {
               </a>
 
               <a
-                href="#"
-                aria-label="LinkedIn"
+                href={siteConfig.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Sitio web"
                 className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 text-slate-300 transition hover:border-blue-500 hover:bg-blue-600 hover:text-white"
               >
-                <Link size={20} />
+                <Globe size={20} />
               </a>
 
               <a
-                href="mailto:contact@aetherix.dev"
+                href={`mailto:${siteConfig.email}`}
                 aria-label="Correo"
                 className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 text-slate-300 transition hover:border-blue-500 hover:bg-blue-600 hover:text-white"
               >
@@ -59,7 +66,9 @@ export default function Footer() {
               </a>
 
               <a
-                href="#contact"
+                href={`https://wa.me/${phoneNumber}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label="WhatsApp"
                 className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 text-slate-300 transition hover:border-blue-500 hover:bg-blue-600 hover:text-white"
               >
@@ -69,52 +78,52 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-white">
+            <h3 className="text-sm font-bold uppercase tracking-[0.2em]">
               Navegación
             </h3>
 
             <ul className="mt-6 space-y-4">
               {navigation.map((item) => (
                 <li key={item.label}>
-                  <a
-                    href={item.href}
+                  <Link
+                    href={`/${item.href}`}
                     className="text-slate-400 transition hover:text-blue-400"
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-white">
+            <h3 className="text-sm font-bold uppercase tracking-[0.2em]">
               Servicios
             </h3>
 
             <ul className="mt-6 space-y-4">
               {services.map((service) => (
                 <li key={service}>
-                  <a
-                    href="#services"
+                  <Link
+                    href="/#services"
                     className="text-slate-400 transition hover:text-blue-400"
                   >
                     {service}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-white">
+            <h3 className="text-sm font-bold uppercase tracking-[0.2em]">
               Contacto
             </h3>
 
             <div className="mt-6 space-y-4 text-slate-400">
-              <p>contact@aetherix.dev</p>
-              <p>+51 999 999 999</p>
-              <p>Perú</p>
+              <p>{siteConfig.email}</p>
+              <p>{siteConfig.phone}</p>
+              <p>{siteConfig.location}</p>
               <p>Atención remota internacional</p>
             </div>
           </div>
@@ -124,13 +133,19 @@ export default function Footer() {
           <p>© {currentYear} Aetherix. Todos los derechos reservados.</p>
 
           <div className="flex gap-6">
-            <a href="#" className="transition hover:text-white">
+            <Link
+              href="/privacy"
+              className="transition hover:text-white"
+            >
               Privacidad
-            </a>
+            </Link>
 
-            <a href="#" className="transition hover:text-white">
+            <Link
+              href="/terms"
+              className="transition hover:text-white"
+            >
               Términos
-            </a>
+            </Link>
           </div>
         </div>
       </Container>
