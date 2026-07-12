@@ -10,11 +10,14 @@ import Technologies from "@/components/sections/Technologies";
 import Testimonials from "@/components/sections/Testimonials";
 import WhyChooseUs from "@/components/sections/WhyChooseUs";
 
+import BackToTop from "@/components/ui/BackToTop";
+import ScrollProgress from "@/components/ui/ScrollProgress";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 
 export default function Home() {
   return (
     <>
+      <ScrollProgress />
       <Navbar />
 
       <main>
@@ -50,6 +53,7 @@ export default function Home() {
       </main>
 
       <Footer />
+      <BackToTop />
     </>
   );
 }
