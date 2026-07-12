@@ -11,6 +11,7 @@ import Testimonials from "@/components/sections/Testimonials";
 import WhyChooseUs from "@/components/sections/WhyChooseUs";
 
 import BackToTop from "@/components/ui/BackToTop";
+import FloatingContact from "@/components/ui/FloatingContact";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 
@@ -53,6 +54,8 @@ export default function Home() {
       </main>
 
       <Footer />
+
+      <FloatingContact />
       <BackToTop />
     </>
   );
