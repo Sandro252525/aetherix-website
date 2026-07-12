@@ -1,5 +1,6 @@
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
+
 import Contact from "@/components/sections/Contact";
 import Faq from "@/components/sections/Faq";
 import Hero from "@/components/sections/Hero";
@@ -9,6 +10,8 @@ import Technologies from "@/components/sections/Technologies";
 import Testimonials from "@/components/sections/Testimonials";
 import WhyChooseUs from "@/components/sections/WhyChooseUs";
 
+import ScrollReveal from "@/components/ui/ScrollReveal";
+
 export default function Home() {
   return (
     <>
@@ -16,13 +19,34 @@ export default function Home() {
 
       <main>
         <Hero />
-        <Services />
-        <WhyChooseUs />
-        <Technologies />
-        <Portfolio />
-        <Testimonials />
-        <Faq />
-        <Contact />
+
+        <ScrollReveal>
+          <Services />
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.05}>
+          <WhyChooseUs />
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.1}>
+          <Technologies />
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.15}>
+          <Portfolio />
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.2}>
+          <Testimonials />
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.25}>
+          <Faq />
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.3}>
+          <Contact />
+        </ScrollReveal>
       </main>
 
       <Footer />
