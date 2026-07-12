@@ -1,79 +1,98 @@
-import Container from "@/components/ui/Container";
-import SectionTitle from "@/components/ui/SectionTitle";
-
 import {
-  ShieldCheck,
-  Rocket,
   BrainCircuit,
-  Headset,
+  Headphones,
+  Rocket,
+  ShieldCheck,
 } from "lucide-react";
+
+import Badge from "@/components/ui/Badge";
+import Container from "@/components/ui/Container";
+import FeatureCard from "@/components/ui/FeatureCard";
+import SectionTitle from "@/components/ui/SectionTitle";
+import StatCard from "@/components/ui/StatCard";
 
 const features = [
   {
-    title: "Arquitectura Escalable",
+    title: "Arquitectura escalable",
     description:
-      "Construimos aplicaciones preparadas para crecer junto con tu negocio.",
+      "Diseñamos aplicaciones preparadas para aumentar usuarios, procesos y funcionalidades sin perder rendimiento.",
     icon: ShieldCheck,
   },
   {
-    title: "Tecnología Moderna",
+    title: "Tecnología moderna",
     description:
-      "Trabajamos con Next.js, React, TypeScript, APIs y soluciones Cloud.",
+      "Aplicamos herramientas actuales, buenas prácticas y arquitecturas mantenibles para cada solución.",
     icon: Rocket,
   },
   {
-    title: "Inteligencia Artificial",
+    title: "Automatización e IA",
     description:
-      "Integramos automatización e IA para optimizar procesos empresariales.",
+      "Integramos inteligencia artificial y automatizaciones para reducir tareas repetitivas y mejorar resultados.",
     icon: BrainCircuit,
   },
   {
-    title: "Soporte Continuo",
+    title: "Acompañamiento continuo",
     description:
-      "Acompañamos cada proyecto incluso después de la entrega.",
-    icon: Headset,
+      "Seguimos presentes después de la entrega para optimizar, mantener y hacer crecer cada producto.",
+    icon: Headphones,
+  },
+];
+
+const stats = [
+  {
+    value: "100%",
+    label: "Soluciones personalizadas",
+    description: "Cada proyecto responde a necesidades reales del negocio.",
+  },
+  {
+    value: "360°",
+    label: "Visión integral",
+    description: "Desarrollo, calidad, integración y soporte en un solo equipo.",
+  },
+  {
+    value: "24/7",
+    label: "Productos disponibles",
+    description: "Arquitecturas diseñadas para operar de manera estable.",
   },
 ];
 
 export default function WhyChooseUs() {
   return (
-    <section className="py-24 bg-white">
+    <section className="relative overflow-hidden bg-white py-24">
+      <div className="absolute left-0 top-0 -z-10 h-80 w-80 rounded-full bg-blue-100/60 blur-3xl" />
+
       <Container>
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <SectionTitle
+            eyebrow="¿Por qué Aetherix?"
+            title="Construimos tecnología con visión de negocio"
+            description="No nos limitamos a programar funcionalidades. Analizamos objetivos, procesos y oportunidades para crear productos que generen valor."
+          />
 
-        <SectionTitle
-          centered
-          eyebrow="¿Por qué elegirnos?"
-          title="Más que desarrollo de software"
-          description="Creamos soluciones digitales enfocadas en rendimiento, escalabilidad y crecimiento empresarial."
-        />
-
-        <div className="mt-16 grid gap-8 md:grid-cols-2">
-
-          {features.map((feature) => {
-            const Icon = feature.icon;
-
-            return (
-              <div
-                key={feature.title}
-                className="rounded-3xl border border-slate-200 p-8 transition duration-300 hover:-translate-y-2 hover:border-blue-200 hover:shadow-xl"
-              >
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
-                  <Icon size={30} strokeWidth={2.2} />
-                </div>
-
-                <h3 className="mt-6 text-2xl font-bold text-slate-900">
-                  {feature.title}
-                </h3>
-
-                <p className="mt-4 leading-7 text-slate-600">
-                  {feature.description}
-                </p>
-              </div>
-            );
-          })}
-
+          <Badge>Ingeniería enfocada en resultados</Badge>
         </div>
 
+        <div className="mt-16 grid gap-6 md:grid-cols-2">
+          {features.map((feature) => (
+            <FeatureCard
+              key={feature.title}
+              title={feature.title}
+              description={feature.description}
+              icon={feature.icon}
+            />
+          ))}
+        </div>
+
+        <div className="mt-16 grid gap-6 md:grid-cols-3">
+          {stats.map((stat) => (
+            <StatCard
+              key={stat.label}
+              value={stat.value}
+              label={stat.label}
+              description={stat.description}
+            />
+          ))}
+        </div>
       </Container>
     </section>
   );
