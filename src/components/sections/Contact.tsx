@@ -2,8 +2,10 @@
 
 import { FormEvent, useState } from "react";
 import {
+  AlertCircle,
   ArrowRight,
   CheckCircle2,
+  LoaderCircle,
   Mail,
   MapPin,
   MessageCircle,
@@ -13,13 +15,66 @@ import {
 import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
+import { siteConfig } from "@/config/site";
+
+type SubmissionStatus = "idle" | "loading" | "success" | "error";
+
+interface ContactApiResponse {
+  success?: boolean;
+  message?: string;
+}
 
 export default function Contact() {
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [status, setStatus] = useState<SubmissionStatus>("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const phoneNumber = siteConfig.phone.replace(/\D/g, "");
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setIsSubmitted(true);
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    const payload = {
+      name: String(formData.get("name") ?? "").trim(),
+      company: String(formData.get("company") ?? "").trim(),
+      email: String(formData.get("email") ?? "").trim(),
+      service: String(formData.get("service") ?? "").trim(),
+      message: String(formData.get("message") ?? "").trim(),
+    };
+
+    setStatus("loading");
+    setErrorMessage("");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = (await response.json()) as ContactApiResponse;
+
+      if (!response.ok) {
+        throw new Error(
+          result.message ?? "No fue posible enviar la solicitud.",
+        );
+      }
+
+      form.reset();
+      setStatus("success");
+    } catch (error) {
+      setStatus("error");
+
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Ocurrió un error inesperado.",
+      );
+    }
   };
 
   return (
@@ -35,46 +90,46 @@ export default function Contact() {
 
             <div className="mt-10 space-y-5">
               <a
-                href="mailto:contact@aetherix.dev"
+                href={`mailto:${siteConfig.email}`}
                 className="group flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-blue-200 hover:shadow-lg"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
                   <Mail size={22} />
                 </div>
 
-                <div>
+                <div className="min-w-0">
                   <p className="text-sm text-slate-500">Correo</p>
-                  <p className="font-semibold text-slate-950">
-                    contact@aetherix.dev
+                  <p className="break-all font-semibold text-slate-950">
+                    {siteConfig.email}
                   </p>
                 </div>
               </a>
 
               <a
-                href="tel:+51999999999"
+                href={`tel:+${phoneNumber}`}
                 className="group flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-blue-200 hover:shadow-lg"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
                   <Phone size={22} />
                 </div>
 
                 <div>
                   <p className="text-sm text-slate-500">Teléfono</p>
                   <p className="font-semibold text-slate-950">
-                    +51 999 999 999
+                    {siteConfig.phone}
                   </p>
                 </div>
               </a>
 
               <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
                   <MapPin size={22} />
                 </div>
 
                 <div>
                   <p className="text-sm text-slate-500">Ubicación</p>
                   <p className="font-semibold text-slate-950">
-                    Perú · Atención remota internacional
+                    {siteConfig.location} · Atención remota internacional
                   </p>
                 </div>
               </div>
@@ -97,25 +152,25 @@ export default function Contact() {
           </div>
 
           <div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-xl sm:p-10">
-            {isSubmitted ? (
+            {status === "success" ? (
               <div className="flex min-h-[520px] flex-col items-center justify-center text-center">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-green-100 text-green-600">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
                   <CheckCircle2 size={40} />
                 </div>
 
                 <h3 className="mt-7 text-3xl font-extrabold text-slate-950">
-                  Solicitud recibida
+                  Solicitud enviada
                 </h3>
 
                 <p className="mt-4 max-w-md leading-7 text-slate-600">
-                  Gracias por contactarnos. Revisaremos la información y nos
-                  comunicaremos contigo próximamente.
+                  Gracias por contactarnos. La información fue enviada
+                  correctamente a Aetherix y será revisada lo antes posible.
                 </p>
 
                 <Button
                   className="mt-8"
                   variant="secondary"
-                  onClick={() => setIsSubmitted(false)}
+                  onClick={() => setStatus("idle")}
                 >
                   Enviar otra solicitud
                 </Button>
@@ -145,8 +200,11 @@ export default function Contact() {
                         name="name"
                         type="text"
                         required
+                        maxLength={100}
+                        autoComplete="name"
                         placeholder="Tu nombre"
-                        className="h-12 w-full rounded-xl border border-slate-300 px-4 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                        disabled={status === "loading"}
+                        className="h-12 w-full rounded-xl border border-slate-300 px-4 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-100"
                       />
                     </div>
 
@@ -162,8 +220,11 @@ export default function Contact() {
                         id="company"
                         name="company"
                         type="text"
+                        maxLength={150}
+                        autoComplete="organization"
                         placeholder="Nombre de tu empresa"
-                        className="h-12 w-full rounded-xl border border-slate-300 px-4 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                        disabled={status === "loading"}
+                        className="h-12 w-full rounded-xl border border-slate-300 px-4 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-100"
                       />
                     </div>
                   </div>
@@ -181,8 +242,10 @@ export default function Contact() {
                       name="email"
                       type="email"
                       required
+                      autoComplete="email"
                       placeholder="correo@empresa.com"
-                      className="h-12 w-full rounded-xl border border-slate-300 px-4 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                      disabled={status === "loading"}
+                      className="h-12 w-full rounded-xl border border-slate-300 px-4 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-100"
                     />
                   </div>
 
@@ -199,11 +262,13 @@ export default function Contact() {
                       name="service"
                       required
                       defaultValue=""
-                      className="h-12 w-full rounded-xl border border-slate-300 bg-white px-4 text-slate-950 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                      disabled={status === "loading"}
+                      className="h-12 w-full rounded-xl border border-slate-300 bg-white px-4 text-slate-950 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-100"
                     >
                       <option value="" disabled>
                         Selecciona una opción
                       </option>
+
                       <option value="web">Desarrollo web</option>
                       <option value="system">Sistema empresarial</option>
                       <option value="ai">Inteligencia artificial</option>
@@ -226,18 +291,41 @@ export default function Contact() {
                       name="message"
                       required
                       rows={6}
+                      maxLength={3000}
                       placeholder="Cuéntanos qué necesitas desarrollar..."
-                      className="w-full resize-none rounded-xl border border-slate-300 px-4 py-3 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                      disabled={status === "loading"}
+                      className="w-full resize-none rounded-xl border border-slate-300 px-4 py-3 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-100"
                     />
                   </div>
+
+                  {status === "error" && (
+                    <div
+                      role="alert"
+                      className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-700"
+                    >
+                      <AlertCircle size={21} className="mt-0.5 shrink-0" />
+
+                      <p className="text-sm font-medium">{errorMessage}</p>
+                    </div>
+                  )}
 
                   <Button
                     type="submit"
                     size="lg"
                     className="w-full gap-2"
+                    disabled={status === "loading"}
                   >
-                    Enviar solicitud
-                    <ArrowRight size={20} />
+                    {status === "loading" ? (
+                      <>
+                        <LoaderCircle size={20} className="animate-spin" />
+                        Enviando solicitud...
+                      </>
+                    ) : (
+                      <>
+                        Enviar solicitud
+                        <ArrowRight size={20} />
+                      </>
+                    )}
                   </Button>
                 </form>
               </>

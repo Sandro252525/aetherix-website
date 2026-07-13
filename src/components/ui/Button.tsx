@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 interface ButtonProps {
   children: ReactNode;
@@ -8,6 +8,7 @@ interface ButtonProps {
   className?: string;
   onClick?: () => void;
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
 export default function Button({
@@ -18,6 +19,7 @@ export default function Button({
   className = "",
   onClick,
   type = "button",
+  disabled = false,
 }: ButtonProps) {
   const baseStyle =
     "inline-flex items-center justify-center rounded-xl font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2";
@@ -35,9 +37,13 @@ export default function Button({
     lg: "px-8 py-4 text-lg",
   };
 
-  const styles = `${baseStyle} ${variants[variant]} ${sizes[size]} ${className}`;
+  const disabledStyles = disabled
+    ? "cursor-not-allowed opacity-60 hover:translate-y-0 hover:shadow-lg"
+    : "";
 
-  if (href) {
+  const styles = `${baseStyle} ${variants[variant]} ${sizes[size]} ${disabledStyles} ${className}`;
+
+  if (href && !disabled) {
     return (
       <a href={href} className={styles} onClick={onClick}>
         {children}
@@ -45,8 +51,14 @@ export default function Button({
     );
   }
 
+  const buttonProps: ButtonHTMLAttributes<HTMLButtonElement> = {
+    type,
+    disabled,
+    onClick,
+  };
+
   return (
-    <button type={type} className={styles} onClick={onClick}>
+    <button {...buttonProps} className={styles}>
       {children}
     </button>
   );
