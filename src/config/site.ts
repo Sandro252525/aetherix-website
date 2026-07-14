@@ -5,7 +5,7 @@ export const siteConfig = {
   description:
     "Desarrollamos plataformas web, sistemas empresariales, automatizaciones, inteligencia artificial e integraciones para empresas que quieren crecer con tecnología.",
 
-  url: "https://aetherix-website.vercel.app",
+  url: "https://aetherix-website-wheat.vercel.app",
 
   email: "sandroloyola2017@gmail.com",
   phone: "+51 924 985 856",
